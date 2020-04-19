@@ -120,5 +120,9 @@ vagrant box add <A NAME> package.box # package.box is the output from above
 
 ```sh
 tar -xzvf package.box
-
 ```
+
+Vagrantfile
+vox.vmdk
+box.ovf
+metadata.json -> Has the name of the provider, version, etc...
