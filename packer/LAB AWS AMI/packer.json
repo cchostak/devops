@@ -1,0 +1,49 @@
+{
+    "variables": {
+      "instance_size": "t2.small",
+      "ami_name": "ami-cloud_user",
+      "base_ami": "ami-1853ac65",
+      "ssh_username": "ec2-user",
+      "vpc_id": "",
+      "subnet_id": ""
+    },
+    "builders": [
+          {
+            "type": "amazon-instance",
+            "ami_description": "AWS image",
+            "access_key": "XXXXXX",
+            "secret_key": "XXXXXX",
+            "token": "XXXXXX",
+            "region": "us-east-1",
+            "source_ami": "{{ user `base_ami` }}",
+            "instance_type": "{{ user `instance_size` }}",
+            "ssh_username": "{{ user `ssh_username` }}",
+            "ssh_timeout": "20m",
+            "ssh_pty": true,
+            "vpc_id": "{{ user `vpc_id` }}",
+            "subnet_id": "{{ user `subnet_id` }}",
+            "tags": [
+                {
+                    "Name": "Base AMI",
+                    "BuiltBy": "Packer"
+                }
+                ],
+            "account_id": "5490-9150-8135",
+            "s3_bucket": "packer-images-linux-cchostak",
+            "x509_cert_path": "./myTest.cert.pem",
+            "x509_key_path": "./myTest.private.key",
+            "x509_upload_path": "/tmp",
+            "ami_name": "{{ user `ami_name` }}"
+          }
+    ],
+    "provisioners": [
+      {
+        "type": "shell",
+        "inline": [
+          "sudo yum update -y",
+          "sudo yum install git"
+        ]
+      }
+    ]
+  }
+  
