@@ -1,0 +1,10 @@
+version: "3.7"
+
+services:
+  nexus:
+    image: sonatype/nexus3:3.22.1
+    volumes:
+      - nexus:/nexus-data
+
+volumes:
+  nexus:

@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  jenkins:
+    image: jenkins/jenkins:lts
+    volumes:
+      - jenkins:/var/jenkins_home
+    ports:
+      - 8080:8080
+      - 50000:50000
+  slv:
+    image: jenkins/inbound-agent
+    environment:
+        - JENKINS_URL=http://localhost:8080/computer/slv/slave-agent.jnlp
+        - JENKINS_SECRET=d52587194c5a46fe767eba90e3b81334a4d4d043744b7fb137b62606e8db7161
+        - JENKINS_AGENT_NAME=slv
+        - JENKINS_AGENT_WORKDIR=/home/jenkins/agent
+    volumes:
+      - slv:/home/jenkins/agent
+volumes:
+  jenkins:
+  slv:
