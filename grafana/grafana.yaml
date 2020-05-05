@@ -1,0 +1,15 @@
+version: "3.7"
+
+services:
+  grafana:
+    image: grafana/grafana
+    volumes:
+      - grafana_lib:/var/lib/grafana
+      - grafana_etc:/etc/grafana
+      - grafana_log:/var/log/grafana
+    ports:
+      - 3000:3000
+volumes:
+  grafana_lib:
+  grafana_etc:
+  grafana_log:

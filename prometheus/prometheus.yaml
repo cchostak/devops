@@ -1,0 +1,8 @@
+version: "3.7"
+
+services:
+  prometheus:
+    image: bitnami/prometheus:latest
+
+volumes:
+  prometheus:

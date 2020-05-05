@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  form(name="add-estimation", action="/process", method="post")
+    div.input
+      span.label Title
+      input(type="text", name="title")
+      input(type="hidden", name="_csrf", value="#{csrfToken}")
+    div.actions
+      input(type="submit", value="add")
