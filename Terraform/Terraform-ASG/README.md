@@ -17,3 +17,7 @@ eval $(ssh-agent)
 ssh-add aws-ec2
 ssh ec2-user@3.83.106.238
 ```
+
+# NOTE
+
+The keys here (aws-ec2 and aws-ec2.pub) are not safe to use, so, keep that in mind if you use this in your environment.
