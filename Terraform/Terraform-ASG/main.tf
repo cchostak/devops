@@ -141,6 +141,16 @@ module "asg" {
   max_size                  = 10
   desired_capacity          = 2
   wait_for_capacity_timeout = 0
+  create_asg_with_initial_lifecycle_hook = true
+
+  initial_lifecycle_hook_name                  = "devops-pro-hook"
+  initial_lifecycle_hook_lifecycle_transition  = "autoscaling:EC2_INSTANCE_LAUNCHING" #https://docs.aws.amazon.com/autoscaling/ec2/userguide/AutoScalingGroupLifecycle.html
+  initial_lifecycle_hook_default_result       = "CONTINUE"
+  initial_lifecycle_hook_notification_metadata =<<EOF
+  {
+    "foo": "bar"
+  }
+  EOF
 
   tags = [
     {
@@ -151,9 +161,8 @@ module "asg" {
   ]
 }
 
-######
-# ELB
-######
+### ELB
+
 module "elb" {
   source = "terraform-aws-modules/elb/aws"
 
@@ -182,6 +191,41 @@ module "elb" {
 
   tags = {
     Owner       = "user"
+    Environment = "dev"
+  }
+}
+
+### CLOUDWATCH
+
+module "metric_alarm" {
+  source  = "terraform-aws-modules/cloudwatch/aws//modules/metric-alarm"
+  version = "~> 1.0"
+
+  alarm_name          = "my-application-logs-errors"
+  alarm_description   = "Bad errors in my-application-logs"
+  comparison_operator = "GreaterThanOrEqualToThreshold"
+  evaluation_periods  = 1
+  threshold           = 10
+  period              = 60
+  unit                = "Count"
+
+  namespace   = "MyApplication"
+  metric_name = "ErrorCount"
+  statistic   = "Maximum"
+
+  alarm_actions = ["arn:aws:sns:eu-west-1:835367859852:my-sns-queue"]
+}
+
+### SQS
+
+module "user_queue" {
+  source  = "terraform-aws-modules/sqs/aws"
+  version = "~> 2.0"
+
+  name = "user"
+
+  tags = {
+    Service     = "user"
     Environment = "dev"
   }
 }
